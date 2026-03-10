@@ -1,0 +1,55 @@
+# koyeb.yaml — Koyeb service definition
+# Deploy via: koyeb service create --file koyeb.yaml
+
+name: imdb-caption-bot
+
+definition:
+  name: imdb-caption-bot
+  type: web
+
+  git:
+    repository: github.com/YOUR_USERNAME/imdb-caption-bot   # change this
+    branch: main
+    build_command: ""
+    run_command: "python main.py"
+
+  # Or use Docker (recommended):
+  # docker:
+  #   image: your-dockerhub-user/imdb-caption-bot:latest
+
+  instance_types:
+    - type: nano                  # free tier
+
+  ports:
+    - port: 8080
+      protocol: http
+
+  health_checks:
+    - path: /health
+      port: 8080
+      protocol: http
+
+  env:
+    - key: API_ID
+      value: ""                   # fill in or use Koyeb secrets
+    - key: API_HASH
+      value: ""
+    - key: BOT_TOKEN
+      value: ""
+    - key: MONGO_URI
+      value: ""
+    - key: OMDB_API_KEY
+      value: ""
+    - key: TMDB_API_KEY
+      value: ""
+    - key: CAPTION_TEMPLATE
+      value: "default"
+    - key: PORT
+      value: "8080"
+
+  scaling:
+    min: 1
+    max: 1
+
+  regions:
+    - was                         # Washington DC (lowest latency to Telegram)

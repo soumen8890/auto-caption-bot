@@ -1,0 +1,30 @@
+# render.yaml — Deploy to Render with one click
+# https://render.com/docs/infrastructure-as-code
+
+services:
+  - type: web
+    name: imdb-caption-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free                    # upgrade to "starter" for always-on
+    healthCheckPath: /health
+
+    envVars:
+      - key: API_ID
+        sync: false               # set in Render dashboard
+      - key: API_HASH
+        sync: false
+      - key: BOT_TOKEN
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: OMDB_API_KEY
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
+      - key: CAPTION_TEMPLATE
+        value: default
+      - key: PORT
+        value: "8080"
+
+    autoDeploy: true              # redeploy on every git push
